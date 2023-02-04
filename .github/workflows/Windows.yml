@@ -85,7 +85,7 @@ jobs:
       - name: Adding Qt to PATH Variable
         working-directory: source
         run: |
-          set PATH=%QTDIR%\bin;%PATH%
+          set PATH=%PATH%;%QTDIR%\bin
           
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
@@ -102,18 +102,21 @@ jobs:
       - name: Build (Release)
         working-directory: source
         run: |
+          cd PiDMX
           cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
           cmake --build ./build
           
       - name: Deploying
         working-directory: source
         run: |
+          cd PiDMX
           cd build
           windeployqt ./PiDMX.exe -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
         run: |
+          cd PiDMX
           cd build
           tar -cvf pidmx-windows.tar PiDMX.exe
           
@@ -122,4 +125,4 @@ jobs:
         with:
           name: pidmx-windows
           path: |
-            ./source/build/pidmx-windows.tar
+            ./source/PiDMX/build/pidmx-windows.tar
