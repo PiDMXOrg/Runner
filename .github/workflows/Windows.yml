@@ -89,9 +89,9 @@ jobs:
           cd ../KDDockWidgets
           mkdir build
           cd build
-          cmake -G Ninja -DCMAKE_PREFIX_PATH=%Qt6_DIR% -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF ../
+          cmake -G Ninja -DCMAKE_PREFIX_PATH=%Qt6_DIR% -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF ../
           cmake --build .
-          cmake --build . --target install
+          cmake --build . --target install --prefix ./../../KDDockWidgets_out
           cd ../../source
         env:
           CC: gcc
