@@ -55,6 +55,15 @@ jobs:
         with:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            
+      - name: Cloning PiDMX switching to release
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX.git
+          cd PiDMX
+          git checkout release/v0.1.1
+          cd ../source
 
       - name: Cloning PiDMX Common and switching to develop
         working-directory: source
@@ -89,18 +98,21 @@ jobs:
       - name: Build (Release)
         working-directory: source
         run: |
+          cd PiDMX
           cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
           cmake --build ./build
           
       - name: Deploying
         working-directory: source
         run: |
+          cd PiDMX
           cd build
           macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
         run: |
+          cd PiDMX        
           cd build
           tar -cvf pidmx-macos.tar PiDMX.app
           
@@ -109,4 +121,4 @@ jobs:
         with:
           name: pidmx-macos
           path: |
-            ./source/build/pidmx-macos.tar
+            ./source/PiDMX/build/pidmx-macos.tar
