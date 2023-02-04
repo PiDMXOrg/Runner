@@ -104,6 +104,9 @@ jobs:
           cd ../PiDMX
           cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
           cmake --build ./build
+        env:
+          CC: gcc
+          CXX: g++
           
       - name: Deploying
         working-directory: source
