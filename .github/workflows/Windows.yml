@@ -49,11 +49,6 @@ jobs:
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
-          
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Cloning PiDMX switching to release
         working-directory: source
@@ -81,11 +76,14 @@ jobs:
           cd KDDockWidgets
           git checkout 2.0
           cd ../source
+        env:
+          CC: gcc
+          CXX: g++
        
       - name: Adding Qt to PATH Variable
-        working-directory: source
-        run: |
-          set PATH=%PATH%;%Qt6_DIR%\bin
+        uses: myci-actions/append-to-path-windows@<version>
+        with:
+          path: <path>
           
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
