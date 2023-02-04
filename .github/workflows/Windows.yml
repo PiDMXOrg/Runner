@@ -79,11 +79,6 @@ jobs:
         env:
           CC: gcc
           CXX: g++
-       
-      - name: Adding Qt to PATH Variable
-        uses: myci-actions/append-to-path-windows@<version>
-        with:
-          path: <path>
           
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
