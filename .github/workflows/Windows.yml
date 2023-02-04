@@ -102,7 +102,7 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX
-          cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%Qt6_DIR% -S . -B "./build"
           cmake --build ./build
         env:
           CC: gcc
