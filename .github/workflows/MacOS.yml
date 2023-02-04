@@ -121,4 +121,4 @@ jobs:
         with:
           name: pidmx-macos
           path: |
-            ./source/PiDMX/build/pidmx-macos.tar
+            ./PiDMX/build/pidmx-macos.tar
