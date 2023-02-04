@@ -50,6 +50,11 @@ jobs:
           modules: qtserialport
           set-env: true
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            
       - name: Cloning PiDMX switching to release
         working-directory: source
         run: |
@@ -95,21 +100,21 @@ jobs:
       - name: Build (Release)
         working-directory: source
         run: |
-          cd PiDMX
+          cd ../PiDMX
           cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
           cmake --build ./build
           
       - name: Deploying
         working-directory: source
         run: |
-          cd PiDMX
+          cd ../PiDMX
           cd build
           windeployqt ./PiDMX.exe -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
         run: |
-          cd PiDMX
+          cd ../PiDMX
           cd build
           tar -cvf pidmx-windows.tar PiDMX.exe
           
@@ -118,4 +123,4 @@ jobs:
         with:
           name: pidmx-windows
           path: |
-            ./source/PiDMX/build/pidmx-windows.tar
+            ./source/../PiDMX/build/pidmx-windows.tar
