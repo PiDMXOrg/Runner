@@ -49,6 +49,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
+          arch: 'win64_mingw'
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.7.0
