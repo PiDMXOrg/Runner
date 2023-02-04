@@ -98,21 +98,21 @@ jobs:
       - name: Build (Release)
         working-directory: source
         run: |
-          cd PiDMX
+          cd ../PiDMX
           cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
           cmake --build ./build
           
       - name: Deploying
         working-directory: source
         run: |
-          cd PiDMX
+          cd ../PiDMX
           cd build
           macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
         run: |
-          cd PiDMX        
+          cd ../PiDMX        
           cd build
           tar -cvf pidmx-macos.tar PiDMX.app
           
