@@ -85,7 +85,7 @@ jobs:
       - name: Adding Qt to PATH Variable
         working-directory: source
         run: |
-          set PATH=%PATH%;%QTDIR%\bin
+          set PATH=%PATH%;%Qt6_DIR%\bin
           
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
