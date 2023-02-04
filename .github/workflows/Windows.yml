@@ -81,9 +81,6 @@ jobs:
           cd KDDockWidgets
           git checkout 2.0
           cd ../source
-        env:
-          CC: gcc
-          CXX: g++
           
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
@@ -95,6 +92,9 @@ jobs:
           cmake --build .
           cmake --build . --target install
           cd ../../source
+        env:
+          CC: gcc
+          CXX: g++
         
 # -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.6" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH="${Qt5_DIR}" ..
       - name: Build (Release)
