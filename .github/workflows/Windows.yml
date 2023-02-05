@@ -129,4 +129,4 @@ jobs:
         with:
           name: pidmx-windows
           path: |
-            D:/a/Runner/Runner/PiDMX/build/deploy/pidmx-windows.tar
+            D:/a/Runner/Runner/PiDMX/build/pidmx-windows.tar
