@@ -113,13 +113,17 @@ jobs:
         run: |
           cd ../PiDMX
           cd build
-          windeployqt ./PiDMX.exe -qmldir=../src/QML/Views
+          mkdir deploy
+          mv ./PiDMX.exe ./deploy/PiDMX.exe
+          cd deploy
+          windeployqt ./PiDMX.exe -qmldir=../../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
         run: |
           cd ../PiDMX
           cd build
+          cd deploy
           tar -cvf pidmx-windows.tar PiDMX.exe
           
       - name: Upload artifacts
@@ -127,4 +131,4 @@ jobs:
         with:
           name: pidmx-windows
           path: |
-            D:/a/Runner/Runner/PiDMX/build/pidmx-windows.tar
+            D:/a/Runner/Runner/PiDMX/build/deploy/pidmx-windows.tar
