@@ -106,8 +106,7 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX/build
-          ls
-          macdeployqt ./PiDMX -qmldir=../src/QML/Views
+          macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
