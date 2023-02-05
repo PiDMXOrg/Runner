@@ -105,15 +105,21 @@ jobs:
       - name: Deploying
         working-directory: source
         run: |
+          ls
           cd ../PiDMX
+          ls
           cd build
+          ls
           macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
         run: |
+          ls
           cd ../PiDMX        
+          ls
           cd build
+          ls
           tar -cvf pidmx-macos.tar PiDMX.app
           
       - name: Upload artifacts
