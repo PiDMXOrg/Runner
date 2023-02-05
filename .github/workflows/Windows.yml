@@ -121,10 +121,8 @@ jobs:
       - name: Pack artifacts
         working-directory: source
         run: |
-          cd ../PiDMX
-          cd build
-          cd deploy
-          tar -cvf pidmx-windows.tar PiDMX.exe
+          cd ../PiDMX/build
+          tar -cvf pidmx-windows.tar ./deploy
           
       - name: Upload artifacts
         uses: actions/upload-artifact@v2.1.4
