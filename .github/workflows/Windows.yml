@@ -115,12 +115,14 @@ jobs:
           mkdir deploy
           mv ./PiDMX.exe ./deploy/PiDMX.exe
           mv ./src/libPiDMXLib.dll ./deploy/libPiDMXLib.dll
+          mv ./../../KDDockWidgets_out/libkddockwidgets-qt62.dll ./deploy/libkddockwidgets-qt62.dll
           mv ./src/Qt-Secret/src/libQt-Secret.dll ./deploy/libQt-Secret.dll
           mv ./src/Qt-Secret/src/mini-gmp/src/libQtBigint.dll ./deploy/libQtBigint.dll
           cd deploy
           windeployqt ./PiDMX.exe -qmldir=../../src/QML/Views --compiler-runtime
           windeployqt ./libPiDMXLib.dll -qmldir=../../src/QML/Views --compiler-runtime
           windeployqt ./libQt-Secret.dll --compiler-runtime
+          windeployqt ./libQtBigint.dll --compiler-runtime
 
       - name: Pack artifacts
         working-directory: source
