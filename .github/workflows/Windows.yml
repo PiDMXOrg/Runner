@@ -121,7 +121,6 @@ jobs:
           windeployqt ./PiDMX.exe -qmldir=../../src/QML/Views
           windeployqt ./libPiDMXLib.dll -qmldir=../../src/QML/Views
           windeployqt ./libQt-Secret.dll
-          windeployqt ./libQtBigint.dll
 
       - name: Pack artifacts
         working-directory: source
