@@ -106,14 +106,21 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX/build
-          macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
+          mkdir deploy
+          mv ./PiDMX.exe ./deploy/PiDMX.exe
+          mv ./src/libPiDMXLib.dll ./deploy/libPiDMXLib.dll
+          mv ./src/Qt-Secret/src/libQt-Secret.dll ./deploy/libQt-Secret.dll
+          mv ./src/Qt-Secret/src/mini-gmp/src/libQtBigint.dll ./deploy/libQtBigint.dll
+          cd deploy
+          macdeployqt ./PiDMX.exe -qmldir=../../src/QML/Views
+          macdeployqt ./libPiDMXLib.dll -qmldir=../../src/QML/Views
+          macdeployqt ./libQt-Secret.dll
+          macdeployqt ./libQtBigint.dll
 
       - name: Pack artifacts
         working-directory: source
         run: |
-          ls
           cd ../PiDMX/build
-          ls
           tar -cvf pidmx-macos.tar PiDMX.app
           
       - name: Upload artifacts
