@@ -116,9 +116,7 @@ jobs:
         working-directory: source
         run: |
           ls
-          cd ../PiDMX        
-          ls
-          cd build
+          cd ../PiDMX/build
           ls
           tar -cvf pidmx-macos.tar PiDMX.app
           
