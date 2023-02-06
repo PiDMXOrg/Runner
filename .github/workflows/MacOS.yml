@@ -105,7 +105,7 @@ jobs:
       - name: Deploying
         working-directory: source
         run: |
-          cd ../PiDMX/build
+          cd ../PiDMX/build/src
           ls
           mkdir deploy
           mv ./PiDMX.app ./deploy/PiDMX.app
