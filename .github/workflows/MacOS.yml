@@ -106,16 +106,7 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX/build
-          ls
-          mkdir deploy
-          mv ./PiDMX.app ./deploy/PiDMX.app
-          mv ./src/libPiDMXLib.dylib ./deploy/libPiDMXLib.dylib
-          mv ./src/Qt-Secret/src/libQt-Secret.dylib ./deploy/libQt-Secret.dylib
-          mv ./src/Qt-Secret/src/mini-gmp/src/libQtBigint.dylib ./deploy/libQtBigint.dylib
-          cd deploy
-          macdeployqt ./PiDMX.app -qmldir=../../src/QML/Views
-          macdeployqt ./libPiDMXLib.dylib -qmldir=../../src/QML/Views
-          macdeployqt ./libQt-Secret.dylib
+          macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
 
       - name: Pack artifacts
         working-directory: source
