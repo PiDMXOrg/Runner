@@ -107,12 +107,12 @@ jobs:
         run: |
           cd ../PiDMX/build
           mkdir deploy
-          mv ./PiDMX.exe ./deploy/PiDMX.exe
+          mv ./PiDMX.app ./deploy/PiDMX.app
           mv ./src/libPiDMXLib.a ./deploy/libPiDMXLib.a
           mv ./src/Qt-Secret/src/libQt-Secret.a ./deploy/libQt-Secret.a
           mv ./src/Qt-Secret/src/mini-gmp/src/libQtBigint.a ./deploy/libQtBigint.a
           cd deploy
-          macdeployqt ./PiDMX.exe -qmldir=../../src/QML/Views
+          macdeployqt ./PiDMX.app -qmldir=../../src/QML/Views
           macdeployqt ./libPiDMXLib.a -qmldir=../../src/QML/Views
           macdeployqt ./libQt-Secret.a
           macdeployqt ./libQtBigint.a
