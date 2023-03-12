@@ -91,7 +91,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          working-directory: source/PiDMX_Mobile
+          working-directory: source/../PiDMX_Mobile
 
       - name: Setup deploy key
         uses: webfactory/ssh-agent@v0.5.4
