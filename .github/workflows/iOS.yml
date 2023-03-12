@@ -94,7 +94,7 @@ jobs:
           working-directory: source/../PiDMX_Mobile
 
       - name: Configure & prepare
-        working-directory: source
+        working-directory: source/../PiDMX_Mobile
         env:
           CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
           GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
@@ -103,7 +103,7 @@ jobs:
           echo $CONFIG_CMAKE | base64 --decode > Config.cmake
           
       - name: Build
-        working-directory: source
+        working-directory: source/../PiDMX_Mobile
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
@@ -115,7 +115,7 @@ jobs:
         id: sign_app
         uses: ilharp/sign-android-release@v1
         with:
-          releaseDir: source/fastlane/build/ios
+          releaseDir: source/../PiDMX_Mobile/fastlane/build/ios
           signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
           keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -125,10 +125,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ios-package
-          path: source/fastlane/build/ios/PiDMXMobile-signed.*
+          path: source/../PiDMX_Mobile/fastlane/build/ios/PiDMXMobile-signed.*
 
       - name: Deploy
-        working-directory: source
+        working-directory: source/../PiDMX_Mobile
 #        if: github.ref_name == 'deploy' && matrix.type == 'play'
         run: |
           bundle exec fastlane android play_deploy
