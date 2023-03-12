@@ -111,24 +111,14 @@ jobs:
           export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
           bundle exec fastlane ios testbuild
 
-      - name: Sign app
-        id: sign_app
-        uses: ilharp/sign-android-release@v1
-        with:
-          releaseDir: source/../PiDMX_Mobile/fastlane/build/ios
-          signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
-          keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          buildToolsVersion: 33.0.0
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ios-package
-          path: source/../PiDMX_Mobile/fastlane/build/ios/PiDMXMobile-signed.*
+          path: source/../PiDMX_Mobile/fastlane/build/ios_qt6/PiDMX_Mobile.ipa
 
-      - name: Deploy
-        working-directory: source/../PiDMX_Mobile
+#      - name: Deploy
+#        working-directory: source/../PiDMX_Mobile
 #        if: github.ref_name == 'deploy' && matrix.type == 'play'
-        run: |
-          bundle exec fastlane android play_deploy
+#        run: |
+#          bundle exec fastlane android play_deploy
