@@ -27,6 +27,7 @@ env:
   
 jobs:
   build:
+    if: "contains(github.event.head_commit.message, 'build windows')"
     name: Build PiDMX (Windows)
     runs-on: windows-latest
 

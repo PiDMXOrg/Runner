@@ -27,6 +27,7 @@ env:
   
 jobs:
   build:
+    if: "contains(github.event.head_commit.message, 'build macos')"
     name: Build PiDMX (MacOS)
     runs-on: macos-latest
 
