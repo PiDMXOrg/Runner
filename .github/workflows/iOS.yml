@@ -28,11 +28,8 @@ env:
 jobs:
   build:
     if: "contains(github.event.head_commit.message, 'build ios')"
-    name: Build PiDMX Mobile (Android)
+    name: Build PiDMX Mobile (iOS)
     runs-on: macos-latest
-    strategy:
-      matrix:
-        type: [play]
 
     steps:
       - name: Checkout
@@ -66,12 +63,6 @@ jobs:
           arch: ios
           modules: qtnetworkauth
 
-      - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          working-directory: source
-
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
@@ -86,6 +77,21 @@ jobs:
           cd PiDMX_Common
           git checkout main
           cd ../source
+
+      - name: Cloning PiDMX Mobile and switching to develop
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX_Mobile.git
+          cd PiDMX_Mobile
+          git checkout develop
+          cd ../source
+
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: source/PiDMX_Mobile
 
       - name: Setup deploy key
         uses: webfactory/ssh-agent@v0.5.4
@@ -114,7 +120,7 @@ jobs:
         id: sign_app
         uses: ilharp/sign-android-release@v1
         with:
-          releaseDir: source/fastlane/build/android_${{ matrix.type }}
+          releaseDir: source/fastlane/build/ios
           signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
           keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -123,8 +129,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Android-package_${{ matrix.type }}
-          path: source/fastlane/build/android_${{ matrix.type }}/PiDMXMobile-signed.*
+          name: ios-package
+          path: source/fastlane/build/ios/PiDMXMobile-signed.*
 
       - name: Deploy
         working-directory: source
