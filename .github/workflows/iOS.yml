@@ -115,7 +115,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ios-package
-          path: source/../PiDMX_Mobile/fastlane/build/ios_qt6/PiDMX_Mobile.ipa
+          path: PiDMX_Mobile/fastlane/build/ios_qt6/PiDMX_Mobile.ipa
 
 #      - name: Deploy
 #        working-directory: source/../PiDMX_Mobile
