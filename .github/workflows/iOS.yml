@@ -1,0 +1,133 @@
+name: Android CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "**"
+    paths-ignore:
+      - ".gitignore"
+      - "README.md"
+      # ignore CI for other platforms
+      - ".github/actions/**"
+      - ".github/workflows/CI-iOS-Qt5.yml"
+      - ".github/workflows/CI-iOS.yml"
+      - ".github/workflows/CI-Linux.yml"
+      - ".github/workflows/CI-macOS.yml"
+      - ".github/workflows/CI-Windows-Qt5.yml"
+      - ".github/workflows/CI-Windows.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  QT_VERSION: 6.4.2
+  
+jobs:
+  build:
+    if: "contains(github.event.head_commit.message, 'build ios')"
+    name: Build PiDMX Mobile (Android)
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        type: [play]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: source
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Download Qt (desktop)
+        id: qt-desktop
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: ==2.1.*
+          version: ${{ env.QT_VERSION }}
+          modules: qtnetworkauth
+          set-env: false
+          
+      - name: Download Qt (iOS)
+        id: qt-android-armv7
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: ==2.1.*
+          version: ${{ env.QT_VERSION }}
+          target: ios
+          arch: ios
+          modules: qtnetworkauth
+
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: source
+
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+            host: github.com
+            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Cloning PiDMX Common and switching to main
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX_Common.git
+          cd PiDMX_Common
+          git checkout main
+          cd ../source
+
+      - name: Setup deploy key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
+
+      - name: Configure & prepare
+        working-directory: source
+        env:
+          CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
+          GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
+        run: |
+          bundle exec fastlane ios prepare_qt6
+          echo $CONFIG_CMAKE | base64 --decode > Config.cmake
+          
+      - name: Build
+        working-directory: source
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: |
+          export FL_RUN_CMAKE_XCODE_PATH="${MD_APPLE_SDK_ROOT}"
+          export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
+          bundle exec fastlane ios testbuild
+
+      - name: Sign app
+        id: sign_app
+        uses: ilharp/sign-android-release@v1
+        with:
+          releaseDir: source/fastlane/build/android_${{ matrix.type }}
+          signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
+          keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          buildToolsVersion: 33.0.0
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Android-package_${{ matrix.type }}
+          path: source/fastlane/build/android_${{ matrix.type }}/PiDMXMobile-signed.*
+
+      - name: Deploy
+        working-directory: source
+#        if: github.ref_name == 'deploy' && matrix.type == 'play'
+        run: |
+          bundle exec fastlane android play_deploy
