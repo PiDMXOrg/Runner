@@ -70,7 +70,7 @@ jobs:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Cloning PiDMX Common and switching to ${{ env.BRANCH_NAME }}
+      - name: Cloning PiDMX Common
         working-directory: source
         run: |
           cd ..
@@ -79,7 +79,7 @@ jobs:
           git checkout ${{ env.BRANCH_NAME }}
           cd ../source
 
-      - name: Cloning PiDMX Mobile and switching to ${{ env.BRANCH_NAME }}
+      - name: Cloning PiDMX Mobile
         working-directory: source
         run: |
           cd ..
@@ -189,7 +189,7 @@ jobs:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Cloning PiDMX Common and switching to ${{ env.BRANCH_NAME }}
+      - name: Cloning PiDMX Common
         working-directory: source
         run: |
           cd ..
@@ -198,7 +198,7 @@ jobs:
           git checkout ${{ env.BRANCH_NAME }}
           cd ../source
 
-      - name: Cloning PiDMX Mobile and switching to ${{ env.BRANCH_NAME }}
+      - name: Cloning PiDMX Mobile
         working-directory: source
         run: |
           cd ..
@@ -239,7 +239,7 @@ jobs:
           #echo $GOOGLE_SERVICES_ANDROID | base64 --decode > resources/Android/output/google-services.json
 
       - name: Build
-        working-directory: source
+        working-directory: source/../PiDMX_Mobile
         env:
           BUILD_TYPE: ${{ matrix.type }}
         run: |
@@ -261,7 +261,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Android-package_${{ matrix.type }}
-          path: source/fastlane/build/android_${{ matrix.type }}/PiDMXMobile-signed.*
+          path: PiDMX_Mobile/fastlane/build/android_${{ matrix.type }}/PiDMXMobile-signed.*
 
       - name: Deploy
         working-directory: source
