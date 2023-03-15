@@ -1,4 +1,4 @@
-name: iOS CI
+name: PiDMX Mobile
 on:
   workflow_dispatch:
   push:
@@ -24,6 +24,7 @@ concurrency:
 
 env:
   QT_VERSION: 6.4.2
+  BRANCH_NAME: develop
   
 jobs:
   buildIos:
@@ -69,22 +70,22 @@ jobs:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Cloning PiDMX Common and switching to main
+      - name: Cloning PiDMX Common and switching to ${{ env.BRANCH_NAME }}
         working-directory: source
         run: |
           cd ..
           git clone git@github.com:PiDMXOrg/PiDMX_Common.git
           cd PiDMX_Common
-          git checkout main
+          git checkout ${{ env.BRANCH_NAME }}
           cd ../source
 
-      - name: Cloning PiDMX Mobile and switching to develop
+      - name: Cloning PiDMX Mobile and switching to ${{ env.BRANCH_NAME }}
         working-directory: source
         run: |
           cd ..
           git clone git@github.com:PiDMXOrg/PiDMX_Mobile.git
           cd PiDMX_Mobile
-          git checkout develop
+          git checkout ${{ env.BRANCH_NAME }}
           cd ../source
 
       - name: Setup Fastlane
@@ -116,6 +117,7 @@ jobs:
         with:
           name: ios-package
           path: PiDMX_Mobile/fastlane/build/ios_qt6/PiDMX_Mobile.ipa
+
   buildAndroid:
     if: "contains(github.event.head_commit.message, 'build android')"
     name: Build PiDMX Mobile (Android)
@@ -181,11 +183,35 @@ jobs:
           arch: android_x86_64
           modules: qtnetworkauth
 
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+            host: github.com
+            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Cloning PiDMX Common and switching to ${{ env.BRANCH_NAME }}
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX_Common.git
+          cd PiDMX_Common
+          git checkout ${{ env.BRANCH_NAME }}
+          cd ../source
+
+      - name: Cloning PiDMX Mobile and switching to ${{ env.BRANCH_NAME }}
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX_Mobile.git
+          cd PiDMX_Mobile
+          git checkout ${{ env.BRANCH_NAME }}
+          cd ../source
+
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          working-directory: source
+          working-directory: source/../PiDMX_Mobile
 
       - name: Set up OpenJDK 11
         uses: actions/setup-java@v3
@@ -200,21 +226,6 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: Android_${{ matrix.type }}
-
-      - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v1
-        with:
-            host: github.com
-            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Cloning PiDMX Common and switching to develop
-        working-directory: source
-        run: |
-          cd ..
-          git clone git@github.com:PiDMXOrg/PiDMX_Common.git
-          cd PiDMX_Common
-          git checkout develop
-          cd ../source
         
       - name: Configure & prepare
         working-directory: source
