@@ -246,16 +246,18 @@ jobs:
           export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../gcc_64")"
 
           bundle exec fastlane android ${BUILD_TYPE}
-
-      - name: Sign app
+          
+      - name: Sign app APK
+        # ID used to access action output
         id: sign_app
-        uses: ilharp/sign-android-release@v1
         with:
-          releaseDir: source/PiDMX_Mobile/fastlane/build/android_${{ matrix.type }}
+          releaseDirectory: source/PiDMX_Mobile/fastlane/build/android_${{ matrix.type }}
           signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-          keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          alias: ${{ secrets.ANDROID_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          buildToolsVersion: 33.0.0
+        env:
+          # override default build-tools version (29.0.3) -- optional
+          BUILD_TOOLS_VERSION: "33.0.0"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
