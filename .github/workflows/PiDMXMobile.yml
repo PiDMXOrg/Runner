@@ -251,8 +251,8 @@ jobs:
         id: sign_app
         uses: ilharp/sign-android-release@v1
         with:
-          releaseDir: source/fastlane/build/android_${{ matrix.type }}
-          signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
+          releaseDir: source/PiDMX_Mobile/fastlane/build/android_${{ matrix.type }}
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
           keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           buildToolsVersion: 33.0.0
