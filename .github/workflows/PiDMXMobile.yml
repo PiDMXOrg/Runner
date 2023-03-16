@@ -264,10 +264,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Android-package_${{ matrix.type }}
-          path: PiDMX_Mobile/fastlane/build/android_${{ matrix.type }}/PiDMXMobile-signed.*
+          path: PiDMX_Mobile/fastlane/build/android_${{ matrix.type }}/PiDMXMobile.*
 
       - name: Deploy
-        working-directory: source
+        working-directory: source/../PiDMX_Mobile
 #        if: github.ref_name == 'deploy' && matrix.type == 'play'
         run: |
           bundle exec fastlane android play_deploy
