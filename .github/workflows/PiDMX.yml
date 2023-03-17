@@ -1,4 +1,4 @@
-name: Windows CI
+name: PiDMX
 on:
   workflow_dispatch:
   push:
@@ -26,6 +26,102 @@ env:
   QT_VERSION: 6.4.2
   
 jobs:
+  build:
+    if: "contains(github.event.head_commit.message, 'build macos')"
+    name: Build PiDMX (MacOS)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: source
+          submodules: recursive
+          fetch-depth: 0
+          
+      - name: Setup ninja
+        uses: seanmiddleditch/gha-setup-ninja@v3
+
+      - name: Download Qt (desktop)
+        id: qt-desktop
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: ==2.1.*
+          version: ${{ env.QT_VERSION }}
+          modules: qtserialport
+          set-env: true
+          
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+            host: github.com
+            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            
+      - name: Cloning PiDMX switching to main
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX.git
+          cd PiDMX
+          git checkout main
+          cd ../source
+
+      - name: Cloning PiDMX Common and switching to main
+        working-directory: source
+        run: |
+          cd ..
+          git clone git@github.com:PiDMXOrg/PiDMX_Common.git
+          cd PiDMX_Common
+          git checkout main
+          cd ../source
+          
+      - name: Cloning KDabDockWIdgets 2.0
+        working-directory: source
+        run: |
+          cd ..
+          git clone https://github.com/KDAB/KDDockWidgets.git
+          cd KDDockWidgets
+          git checkout 2.0
+          cd ../source
+          
+      - name: Building KDabDockWIdgets 2.0
+        working-directory: source
+        run: |
+          cd ../KDDockWidgets
+          mkdir build
+          cd build
+          cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF ../
+          cmake --build .
+          cmake --build . --target install
+          cd ../../source
+        
+# -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.6" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH="${Qt5_DIR}" ..
+      - name: Build (Release)
+        working-directory: source
+        run: |
+          cd ../PiDMX
+          cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
+          cmake --build ./build
+          
+      - name: Deploying
+        working-directory: source
+        run: |
+          cd ../PiDMX/build
+          macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
+
+      - name: Pack artifacts
+        working-directory: source
+        run: |
+          cd ../PiDMX/build
+          tar -cvf pidmx-macos.tar PiDMX.app
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2.1.4
+        with:
+          name: pidmx-macos
+          path: |
+            ./PiDMX/build/pidmx-macos.tar
+            
   build:
     if: "contains(github.event.head_commit.message, 'build windows')"
     name: Build PiDMX (Windows)
