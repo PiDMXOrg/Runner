@@ -92,28 +92,28 @@ jobs:
           working-directory: source/../PiDMX
 
       - name: Configure & prepare
-          working-directory: source/../PiDMX
-          env:
-          CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
-          GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
-          run: |
-              bundle exec fastlane macos prepare_qt6
-              echo $CONFIG_CMAKE | base64 --decode > Config.cmake
+        working-directory: source/../PiDMX
+        env:
+        CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
+        GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
+        run: |
+            bundle exec fastlane macos prepare_qt6
+            echo $CONFIG_CMAKE | base64 --decode > Config.cmake
           
       - name: Build
-          working-directory: source/../PiDMX
-          env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          run: |
-            export FL_RUN_CMAKE_XCODE_PATH="${MD_APPLE_SDK_ROOT}"
-            export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
-            bundle exec fastlane macos testbuild
+        working-directory: source/../PiDMX
+        env:
+        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: |
+          export FL_RUN_CMAKE_XCODE_PATH="${MD_APPLE_SDK_ROOT}"
+          export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
+          bundle exec fastlane macos testbuild
 
       - name: Upload artifacts
-          uses: actions/upload-artifact@v3
-          with:
-            name: ios-package
-            path: PiDMX/fastlane/build/macos_qt6/PiDMX.ipa
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-package
+          path: PiDMX/fastlane/build/macos_qt6/PiDMX.ipa
 #            - name: Deploying
 #              working-directory: source
 #              run: |
