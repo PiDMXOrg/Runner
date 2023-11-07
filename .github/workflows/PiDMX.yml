@@ -77,13 +77,13 @@ jobs:
             cmake --build . --target install
             cd ../../source
 
-      # -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.6" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH="${Qt5_DIR}" ..
-      - name: Build (Release)
-        working-directory: source
-        run: |
-          cd ../PiDMX
-          cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
-          cmake --build ./build
+#      -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.6" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH="${Qt5_DIR}" ..
+#      - name: Build (Release)
+#        working-directory: source
+#        run: |
+#          cd ../PiDMX
+#          cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
+#          cmake --build ./build          
 
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
@@ -97,7 +97,7 @@ jobs:
           CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
           GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
         run: |
-            bundle exec fastlane mac prepare_qt6
+            bundle exec fastlane mac app_store
             echo $CONFIG_CMAKE | base64 --decode > Config.cmake
           
       - name: Build
