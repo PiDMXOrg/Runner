@@ -91,14 +91,14 @@ jobs:
           bundler-cache: true
           working-directory: source/../PiDMX
 
-      - name: Configure & prepare
-        working-directory: source/../PiDMX
-        env:
-          CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
-          GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
-        run: |
-            bundle exec fastlane mac app_store
-            echo $CONFIG_CMAKE | base64 --decode > Config.cmake
+#      - name: Configure & prepare
+#        working-directory: source/../PiDMX
+#        env:
+#          CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
+#          GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
+#        run: |
+#            bundle exec fastlane mac app_store
+#            echo $CONFIG_CMAKE | base64 --decode > Config.cmake
           
       - name: Build
         working-directory: source/../PiDMX
@@ -107,7 +107,7 @@ jobs:
         run: |
           export FL_RUN_CMAKE_XCODE_PATH="${MD_APPLE_SDK_ROOT}"
           export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
-          bundle exec fastlane mac testbuild
+          bundle exec fastlane mac app_store
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
