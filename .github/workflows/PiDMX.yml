@@ -94,8 +94,8 @@ jobs:
       - name: Configure & prepare
         working-directory: source/../PiDMX
         env:
-        CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
-        GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
+          CONFIG_CMAKE: ${{ secrets.CONFIG_CMAKE }}
+          GOOGLE_SERVICES_APPLE: ${{ secrets.GOOGLE_SERVICES_APPLE }}
         run: |
             bundle exec fastlane macos prepare_qt6
             echo $CONFIG_CMAKE | base64 --decode > Config.cmake
@@ -103,7 +103,7 @@ jobs:
       - name: Build
         working-directory: source/../PiDMX
         env:
-        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
           export FL_RUN_CMAKE_XCODE_PATH="${MD_APPLE_SDK_ROOT}"
           export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
