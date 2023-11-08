@@ -72,7 +72,7 @@ jobs:
                   cd ../KDDockWidgets
                   mkdir build
                   cd build
-                  cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_OSX_ARCHITECTURES=x86_64;arm64 ../
+                  cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ../
                   cmake --build .
                   cmake --build . --target install
                   cd ../../source
