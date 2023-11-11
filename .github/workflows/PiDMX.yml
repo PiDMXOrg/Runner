@@ -6,7 +6,7 @@ concurrency:
     cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
-    QT_VERSION: 6.5.2
+    QT_VERSION: 6.4.3.0
 
 jobs:
   buildMacOS:
@@ -24,14 +24,24 @@ jobs:
       - name: Setup ninja
         uses: seanmiddleditch/gha-setup-ninja@v3
 
-      - name: Download Qt (desktop)
-        id: qt-desktop
-        uses: jurplel/install-qt-action@v3
-        with:
-          aqtversion: ==2.1.*
-          version: ${{ env.QT_VERSION }}
-          modules: qtserialport
-          set-env: true
+      - name: Download Static Qt
+        if: matrix.type == 'app_store'
+        run: |
+          cd ..
+          wget https://github.com/ntadej/qt-build/releases/download/v${QT_VERSION}.0/Qt_macOS_static.tar.bz2
+          tar xvf Qt_macOS_static.tar.bz2
+          echo "Qt6_DIR=$PWD/Qt/$QT_VERSION/macos_static" >> $GITHUB_ENV
+          echo "$PWD/Qt/$QT_VERSION/macos_static/bin" >> $GITHUB_PATH
+          cd $GITHUB_WORKSPACE
+
+#      - name: Download Qt (desktop)
+#        id: qt-desktop
+#        uses: jurplel/install-qt-action@v3
+#        with:
+#          aqtversion: ==2.1.*
+#          version: ${{ env.QT_VERSION }}
+#          modules: qtserialport
+#          set-env: true
 
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
