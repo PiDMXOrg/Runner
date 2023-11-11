@@ -25,7 +25,6 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@v3
 
       - name: Download Static Qt
-        if: matrix.type == 'app_store'
         run: |
           cd ..
           wget https://github.com/ntadej/qt-build/releases/download/v${QT_VERSION}.0/Qt_macOS_static.tar.bz2
