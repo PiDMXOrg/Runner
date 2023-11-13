@@ -200,7 +200,9 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX/build/deploy
-          binarycreator -c config\config.xml -p packages PiDMX.exe
+          echo %IQTA_TOOLS%
+          echo %IQTA_TOOLS%/bin
+          %IQTA_TOOLS%/bin/binarycreator -c config\config.xml -p packages PiDMX.exe
 
       - name: Pack artifacts
         working-directory: source
