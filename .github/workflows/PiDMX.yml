@@ -202,6 +202,8 @@ jobs:
           cd ../PiDMX/build/deploy
           echo %IQTA_TOOLS%
           echo %IQTA_TOOLS%/bin
+          ls %IQTA_TOOLS%
+          ls %IQTA_TOOLS%/bin
           %IQTA_TOOLS%/bin/binarycreator -c config\config.xml -p packages PiDMX.exe
 
       - name: Pack artifacts
