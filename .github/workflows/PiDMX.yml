@@ -184,7 +184,7 @@ jobs:
         working-directory: source
         run: |
           mkdir ../PiDMX/build/deploy
-          cp -r ./Resources/Windows/installer/* ../PiDMX/build/deploy/
+          cp -r ../PiDMX/Resources/Windows/installer/* ../PiDMX/build/deploy/
           cd ../PiDMX/build
           mv ./PiDMX.exe ./deploy/packages/net.pidmx.pidmx/data/PiDMX.exe
           mv ./src/libPiDMXLib.dll ./deploy/packages/net.pidmx.pidmx/data/libPiDMXLib.dll
