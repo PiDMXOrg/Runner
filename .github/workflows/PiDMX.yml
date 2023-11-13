@@ -179,13 +179,14 @@ jobs:
         env:
           CC: gcc
           CXX: g++
-
+          
       - name: Deploying
         working-directory: source
         run: |
           mkdir ../PiDMX/build/deploy
-          cp -r ../PiDMX/Resources/Windows/installer/* ../PiDMX/build/deploy/
+          cp -r ../PiDMX/Resources/Windows/installer/* ../PiDMX/build/deploy
           cd ../PiDMX/build
+          mkdir ./deploy/packages/net.pidmx.pidmx/data
           mv ./PiDMX.exe ./deploy/packages/net.pidmx.pidmx/data/PiDMX.exe
           mv ./src/libPiDMXLib.dll ./deploy/packages/net.pidmx.pidmx/data/libPiDMXLib.dll
           mv ./../../KDDockWidgets_out/bin/libkddockwidgets-qt62.dll ./deploy/packages/net.pidmx.pidmx/data/libkddockwidgets-qt62.dll
