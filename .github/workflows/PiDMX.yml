@@ -211,15 +211,15 @@ jobs:
           ls ${{ env.IQTA_TOOLS }}/QtInstallerFramework
           ${{ env.IQTA_TOOLS }}/QtInstallerFramework/4.6/bin/binarycreator -c config\config.xml -p packages PiDMX.exe
 
-      - name: Pack artifacts
-        working-directory: source
-        run: |
-          cd ../PiDMX/build/deploy
-          tar -cvf pidmx-windows.tar ./PiDMX.exe
+#      - name: Pack artifacts
+#        working-directory: source
+#        run: |
+#          cd ../PiDMX/build/deploy
+#          tar -cvf pidmx-windows.tar ./PiDMX.exe
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2.1.4
         with:
           name: pidmx-windows
           path: |
-            D:/a/Runner/Runner/PiDMX/build/deploy/pidmx-windows.tar
+            D:/a/Runner/Runner/PiDMX/build/deploy/PiDMX.exe
