@@ -1,33 +1,15 @@
 name: PiDMX
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - "**"
-    tags:
-      - "**"
-    paths-ignore:
-      - ".gitignore"
-      - "README.md"
-      # ignore CI for other platforms
-      - ".github/actions/**"
-      - ".github/workflows/CI-iOS-Qt5.yml"
-      - ".github/workflows/CI-iOS.yml"
-      - ".github/workflows/CI-Linux.yml"
-      - ".github/workflows/CI-macOS.yml"
-      - ".github/workflows/CI-Windows-Qt5.yml"
-      - ".github/workflows/CI-Windows.yml"
+on: workflow_dispatch
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
-  QT_VERSION: 6.4.2
-  
+  QT_VERSION: 6.5.2
+
 jobs:
   buildMacOS:
-    if: "contains(github.event.head_commit.message, 'build macos')"
     name: Build PiDMX (MacOS)
     runs-on: macos-latest
 
@@ -38,7 +20,7 @@ jobs:
           path: source
           submodules: recursive
           fetch-depth: 0
-          
+
       - name: Setup ninja
         uses: seanmiddleditch/gha-setup-ninja@v3
 
@@ -50,13 +32,13 @@ jobs:
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
-          
+
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
-            host: github.com
-            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-            
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Cloning PiDMX switching to main
         working-directory: source
         run: |
@@ -74,7 +56,7 @@ jobs:
           cd PiDMX_Common
           git checkout main
           cd ../source
-          
+
       - name: Cloning KDabDockWIdgets 2.0
         working-directory: source
         run: |
@@ -83,47 +65,40 @@ jobs:
           cd KDDockWidgets
           git checkout 2.0
           cd ../source
-          
+
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
         run: |
           cd ../KDDockWidgets
           mkdir build
           cd build
-          cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF ../
+          cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ../
           cmake --build .
           cmake --build . --target install
           cd ../../source
-        
-# -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.6" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH="${Qt5_DIR}" ..
-      - name: Build (Release)
-        working-directory: source
-        run: |
-          cd ../PiDMX
-          cmake -DCMAKE_BUILD_TYPE=Release -S . -B "./build"
-          cmake --build ./build
-          
-      - name: Deploying
-        working-directory: source
-        run: |
-          cd ../PiDMX/build
-          macdeployqt ./PiDMX.app -qmldir=../src/QML/Views
 
-      - name: Pack artifacts
-        working-directory: source
-        run: |
-          cd ../PiDMX/build
-          tar -cvf pidmx-macos.tar PiDMX.app
-          
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2.1.4
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
         with:
-          name: pidmx-macos
-          path: |
-            ./PiDMX/build/pidmx-macos.tar
-            
+          bundler-cache: true
+          working-directory: source/../PiDMX
+
+      - name: Build
+        working-directory: source/../PiDMX
+        env:
+          MATCH_PASSWORD: ${{ secrets.PiDMX_MATCH_PASSWORD }}
+        run: |
+          export FL_RUN_CMAKE_XCODE_PATH="${MD_APPLE_SDK_ROOT}"
+          export QT_HOST_PATH="$(readlink -f "$Qt6_DIR/../macos")"
+          bundle exec fastlane mac app_store
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-package
+          path: PiDMX/fastlane/build/macos_qt6/PiDMX.ipa
+
   buildWindows:
-    if: "contains(github.event.head_commit.message, 'build windows')"
     name: Build PiDMX (Windows)
     runs-on: windows-latest
 
@@ -134,7 +109,7 @@ jobs:
           path: source
           submodules: recursive
           fetch-depth: 0
-          
+
       - name: Setup ninja
         uses: seanmiddleditch/gha-setup-ninja@v3
 
@@ -146,13 +121,20 @@ jobs:
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
-          arch: 'win64_mingw'
+          arch: "win64_mingw"
+          tools: 'tools_ifw'
+
+      - name: Test path
+        working-directory: source
+        run: |
+          ls ${{ env.IQTA_TOOLS }}
+          ls ${{ env.IQTA_TOOLS }}/QtInstallerFramework/4.6/bin
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.7.0
         with:
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-            
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Cloning PiDMX switching to main
         working-directory: source
         run: |
@@ -170,7 +152,7 @@ jobs:
           cd PiDMX_Common
           git checkout main
           cd ../source
-          
+
       - name: Cloning KDabDockWIdgets 2.0
         working-directory: source
         run: |
@@ -179,7 +161,7 @@ jobs:
           cd KDDockWidgets
           git checkout 2.0
           cd ../source
-          
+
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
         run: |
@@ -193,8 +175,7 @@ jobs:
         env:
           CC: gcc
           CXX: g++
-        
-# -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.6" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH="${Qt5_DIR}" ..
+
       - name: Build (Release)
         working-directory: source
         run: |
@@ -208,26 +189,33 @@ jobs:
       - name: Deploying
         working-directory: source
         run: |
+          mkdir ../PiDMX/build/deploy
+          cp -r ../PiDMX/Resources/Windows/installer/* ../PiDMX/build/deploy
           cd ../PiDMX/build
-          mkdir deploy
-          mv ./PiDMX.exe ./deploy/PiDMX.exe
-          mv ./src/libPiDMXLib.dll ./deploy/libPiDMXLib.dll
-          mv ./../../KDDockWidgets_out/bin/libkddockwidgets-qt62.dll ./deploy/libkddockwidgets-qt62.dll
-          mv ./src/Qt-Secret/src/libQt-Secret.dll ./deploy/libQt-Secret.dll
-          mv ./src/Qt-Secret/src/mini-gmp/src/libQtBigint.dll ./deploy/libQtBigint.dll
+          mkdir ./deploy/packages/net.pidmx.pidmx/data
+          cp -r ./FixtureLibrary ./deploy/packages/net.pidmx.pidmx/data
+          cp -r ./Translations ./deploy/packages/net.pidmx.pidmx/data
+          mv ./PiDMX.exe ./deploy/packages/net.pidmx.pidmx/data/PiDMX.exe
+          mv ./src/libPiDMXLib.dll ./deploy/packages/net.pidmx.pidmx/data/libPiDMXLib.dll
+          mv ./../../KDDockWidgets_out/bin/libkddockwidgets-qt62.dll ./deploy/packages/net.pidmx.pidmx/data/libkddockwidgets-qt62.dll
+          mv ./src/Qt-Secret/src/libQt-Secret.dll ./deploy/packages/net.pidmx.pidmx/data/libQt-Secret.dll
+          mv ./src/Qt-Secret/src/mini-gmp/src/libQtBigint.dll ./deploy/packages/net.pidmx.pidmx/data/libQtBigint.dll
           cd deploy
-          windeployqt ./PiDMX.exe --qmldir=./../../src/QML/Views --compiler-runtime
-          windeployqt ./libPiDMXLib.dll --qmldir=./../../src/QML/Views --compiler-runtime
-
-      - name: Pack artifacts
+          windeployqt ./packages/net.pidmx.pidmx/data/PiDMX.exe --qmldir=./../../src/QML/Views --compiler-runtime
+          windeployqt ./packages/net.pidmx.pidmx/data/libPiDMXLib.dll --qmldir=./../../src/QML/Views --compiler-runtime
+          windeployqt ./packages/net.pidmx.pidmx/data/libkddockwidgets-qt62.dll --qmldir=./../../src/QML/Views --compiler-runtime
+          windeployqt ./packages/net.pidmx.pidmx/data/libQt-Secret.dll --qmldir=./../../src/QML/Views --compiler-runtime
+      
+      - name: Creating Installer
         working-directory: source
         run: |
-          cd ../PiDMX/build
-          tar -cvf pidmx-windows.tar ./deploy
-          
+          cd ../PiDMX/build/deploy
+          ls ${{ env.IQTA_TOOLS }}/QtInstallerFramework
+          ${{ env.IQTA_TOOLS }}/QtInstallerFramework/4.6/bin/binarycreator -c config\config.xml -p packages PiDMX.exe
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v2.1.4
         with:
           name: pidmx-windows
           path: |
-            D:/a/Runner/Runner/PiDMX/build/pidmx-windows.tar
+            D:/a/Runner/Runner/PiDMX/build/deploy/PiDMX.exe
