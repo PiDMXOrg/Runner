@@ -61,15 +61,15 @@ jobs:
         working-directory: source
         run: |
           cd ..
-          git clone https://github.com/KDAB/KDDockWidgets.git
-          cd KDDockWidgets
-          git checkout 2.0
+          wget https://github.com/KDAB/KDDockWidgets/releases/download/v2.0.0/kddockwidgets-2.0.0.tar.gz
+          tar -xvf kddockwidgets-2.0.0.tar.gz
+          cd kddockwidgets-2.0.0
           cd ../source
 
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
         run: |
-          cd ../KDDockWidgets
+          cd ../kddockwidgets-2.0.0
           mkdir build
           cd build
           cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ../
@@ -158,15 +158,15 @@ jobs:
         working-directory: source
         run: |
           cd ..
-          git clone https://github.com/KDAB/KDDockWidgets.git
-          cd KDDockWidgets
-          git checkout 2.0
+          wget https://github.com/KDAB/KDDockWidgets/releases/download/v2.0.0/kddockwidgets-2.0.0.tar.gz
+          tar -xvf kddockwidgets-2.0.0.tar.gz
+          cd kddockwidgets-2.0.0
           cd ../source
 
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
         run: |
-          cd ../KDDockWidgets
+          cd ../kddockwidgets-2.0.0
           mkdir build
           cd build
           cmake -G Ninja -DCMAKE_PREFIX_PATH=%Qt6_DIR% -DKDDockWidgets_QTQUICK=ON -DCMAKE_INSTALL_PREFIX="./../../KDDockWidgets_out" -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF ../
