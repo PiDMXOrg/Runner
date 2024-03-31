@@ -158,8 +158,8 @@ jobs:
         working-directory: source
         run: |
           cd ..
-          curl https://github.com/KDAB/KDDockWidgets/releases/download/v2.0.0/kddockwidgets-2.0.0.tar.gz
-          tar -xvf kddockwidgets-2.0.0.tar.gz
+          curl https://github.com/KDAB/KDDockWidgets/releases/download/v2.0.0/kddockwidgets-2.0.0.zip
+          7z x kddockwidgets-2.0.0.tar.gz
           cd kddockwidgets-2.0.0
           cd ../source
 
