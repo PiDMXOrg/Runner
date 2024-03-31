@@ -299,7 +299,6 @@ jobs:
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtlottie 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtmultimedia 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtnetworkauth 
-          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtpdf 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtpositioning 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquick3dphysics 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquickeffectmaker 
@@ -312,13 +311,11 @@ jobs:
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebchannel 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebengine 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebsockets 
-          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebview 
-          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/debug_info 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebview  
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qt5compat 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquick3d 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquicktimeline 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtshadertools 
-          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwaylandcompositor
           ls
           pwd
 
