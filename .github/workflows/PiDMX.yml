@@ -346,7 +346,6 @@ jobs:
           git clone git@github.com:PiDMXOrg/PiDMX_Common.git
           cd PiDMX_Common
           git checkout develop
-          cd ../source
 
       - name: Downloading KDabDockWIdgets 2.0
         working-directory: source
@@ -354,8 +353,7 @@ jobs:
           cd ..
           wget https://github.com/KDAB/KDDockWidgets/releases/download/v2.0.0/kddockwidgets-2.0.0.tar.gz
           tar -xvf kddockwidgets-2.0.0.tar.gz
-          cd kddockwidgets-2.0.0
-          cd ../source
+          rm kddockwidgets-2.0.0.tar.gz
 
       - name: Building KDabDockWIdgets 2.0
         working-directory: source
@@ -363,7 +361,7 @@ jobs:
           cd ../kddockwidgets-2.0.0
           mkdir build
           cd build
-          cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ../
+          ~/qt/qt-raspi/bin/qt-cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../KDDockWidgets_out -DKDDockWidgets_QTQUICK=ON -DKDDockWidgets_QT6=ON -DCMAKE_BUILD_TYPE=Release -DKDDockWidgets_DEVELOPER_MODE=OFF -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_OSX_ARCHITECTURES="arm64" ../
           cmake --build .
           cmake --build . --target install
           cd ../../source
@@ -372,7 +370,7 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX
-          cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DCMAKE_PREFIX_PATH=%Qt6_DIR% -S . -B "./build" -G "MinGW Makefiles"
+          ~/qt/qt-raspi/bin/qt-cmake -B "./build" CMakeLists.txt
           cmake --build ./build
         env:
           CC: gcc
