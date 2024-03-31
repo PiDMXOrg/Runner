@@ -160,7 +160,7 @@ jobs:
           cd ..
           curl -LO https://github.com/KDAB/KDDockWidgets/releases/download/v2.0.0/kddockwidgets-2.0.0.zip
           dir
-          7z x kddockwidgets-2.0.0.tar.gz
+          7z x kddockwidgets-2.0.0.zip
           cd kddockwidgets-2.0.0
           cd ../source
 
@@ -267,16 +267,41 @@ jobs:
           git checkout develop
           cd ../source
 
-      - name: Download Qt Sources
+      - name: Downloading RaspBerry Pi SysRoot
         working-directory: source
         run: |
           cd ..
           wget -q https://download.qt.io/archive/qt/6.6/${{ env.QT_VERSION }}/single/qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
           tar -xf qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
+
+      - name: Download Qt Sources
+        working-directory: source
+        run: |
+          cd ..
+          wget -q https://pidmx.net/PiDMX/rpi-sysroot.tar.xz
+          tar -xf rpi-sysroot.tar.xz
+          ls
+          cd rpi-sysroot
+          ls
+
+      - name: Configuring Qt Sources for Raspberry Pi
+        working-directory: source
+        run: |
+          cd ..
           mkdir raspi-build
           cd raspi-build
           ../qt-everywhere-src-${{ env.QT_VERSION }}/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $Qt6_DIR -extprefix ~/qt/qt-raspi -prefix ~/qt/qt6.5.3-raspi -device linux-rasp-pi4-aarch64 -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=../PiDMX/Resources/RaspBerryPi/rpi_toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
-          cmake --build . --parallel 4
+
+      - name: Building Qt Sources for RaspBerry Pi
+        working-directory: source
+        run: |
+          cd ../raspi-build
+          cmake --build . --parallel
+
+      - name: Installing Qt Sources for RaspBerry Pi
+        working-directory: source
+        run: |
+          cd ../raspi-build
           cmake --install .
 
       - name: Cloning PiDMX Common and switching to develop
