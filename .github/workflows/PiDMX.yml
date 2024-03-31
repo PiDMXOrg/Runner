@@ -275,7 +275,7 @@ jobs:
           tar -xf qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
           mkdir raspi-build
           cd raspi-build
-          ../configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $Qt6_DIR -extprefix ~/qt/qt-raspi -prefix ~/qt/qt6.5.3-raspi -device linux-rasp-pi4-aarch64 -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=./source/PiDMX/Resources/RaspBerryPi/rpi_toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
+          ../qt-everywhere-src-${{ env.QT_VERSION }}/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $Qt6_DIR -extprefix ~/qt/qt-raspi -prefix ~/qt/qt6.5.3-raspi -device linux-rasp-pi4-aarch64 -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=./source/PiDMX/Resources/RaspBerryPi/rpi_toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
           cmake --build . --parallel 4
           cmake --install .
 
