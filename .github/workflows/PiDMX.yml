@@ -271,18 +271,20 @@ jobs:
         working-directory: source
         run: |
           cd ..
-          wget -q https://download.qt.io/archive/qt/6.6/${{ env.QT_VERSION }}/single/qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
-          tar -xf qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
-
-      - name: Download Qt Sources
-        working-directory: source
-        run: |
-          cd ..
           wget -q https://pidmx.net/PiDMX/rpi-sysroot.tar.xz
           tar -xf rpi-sysroot.tar.xz
           ls
           cd rpi-sysroot
           ls
+
+      - name: Download Qt Sources
+        working-directory: source
+        run: |
+          cd ..
+          wget -q https://download.qt.io/archive/qt/6.6/${{ env.QT_VERSION }}/single/qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
+          tar -xf qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
+          ls
+          pwd
 
       - name: Configuring Qt Sources for Raspberry Pi
         working-directory: source
