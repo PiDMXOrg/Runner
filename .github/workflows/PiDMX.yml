@@ -286,6 +286,39 @@ jobs:
           echo "Extacting Qt Sources..."
           tar -xf qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz          
           rm qt-everywhere-src-${{ env.QT_VERSION }}.tar.xz
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qt3d 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtcharts 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtconnectivity 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtdatavis3d 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtgraphs 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtgrpc 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qthttpserver 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtimageformats 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtlanguageserver 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtlocation 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtlottie 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtmultimedia 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtnetworkauth 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtpdf 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtpositioning 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquick3dphysics 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquickeffectmaker 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtremoteobjects 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtscxml 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtsensors 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtserialbus 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtspeech 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtvirtualkeyboard 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebchannel 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebengine 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebsockets 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebview 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/debug_info 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qt5compat 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquick3d 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquicktimeline 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtshadertools 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwaylandcompositor
           ls
           pwd
 
