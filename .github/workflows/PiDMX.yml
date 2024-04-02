@@ -370,7 +370,7 @@ jobs:
         working-directory: source
         run: |
           cd ../PiDMX
-          ~/qt/qt-raspi/bin/qt-cmake -G Ninja -B "./build" -DCMAKE_TOOLCHAIN_FILE=./Resources/RaspBerryPi/rpi_toolchain.cmake
+          ~/qt/qt-raspi/bin/qt-cmake -G Ninja -B "./build"
           cmake --build ./build
         env:
           CC: gcc
