@@ -276,6 +276,8 @@ jobs:
           echo "Extracting RaspBerry Pi SysRoot..."
           tar -xf rpi-sysroot.tar.xz
           rm rpi-sysroot.tar.xz
+          cd rpi-sysroot
+          ls
 
       - name: Download Qt Sources
         working-directory: source
