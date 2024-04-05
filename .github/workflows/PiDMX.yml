@@ -243,7 +243,7 @@ jobs:
         with:
           aqtversion: ==2.1.*
           version: ${{ env.QT_VERSION }}
-          modules: qtserialport
+          modules: 'qtserialport qtshadertools'
           set-env: true
 
       - name: Preparing Linux
@@ -316,8 +316,7 @@ jobs:
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtwebview  
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qt5compat 
           rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquick3d 
-          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquicktimeline 
-          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtshadertools 
+          rm -r qt-everywhere-src-${{ env.QT_VERSION }}/qtquicktimeline
           ls
           pwd
 
@@ -327,7 +326,7 @@ jobs:
           cd ..
           mkdir raspi-build
           cd raspi-build
-          ../qt-everywhere-src-${{ env.QT_VERSION }}/configure -release -opengl es2 -skip qt3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtgraphs -skip qtgrpc -skip qthttpserver -skip qtimageformats -skip qtlanguageserver -skip qtlocation -skip qtlottie -skip qtmultimedia -skip qtnetworkauth -skip qtpdf -skip qtpositioning -skip qtquick3dphysics -skip qtquickeffectmaker -skip qtremoteobjects -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip debug_info -skip qt5compat -skip qtquick3d -skip qtquicktimeline -skip qtshadertools -skip qtwaylandcompositor -nomake examples -nomake tests -extprefix ~/qt/qt-raspi -prefix ~/qt/qt${{ env.QT_VERSION }}-raspi -device linux-rasp-pi4-aarch64 -qt-host-path $Qt6_DIR -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=../PiDMX/Resources/RaspBerryPi/rpi_toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
+          ../qt-everywhere-src-${{ env.QT_VERSION }}/configure -release -opengl es2 -skip qt3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtgraphs -skip qtgrpc -skip qthttpserver -skip qtimageformats -skip qtlanguageserver -skip qtlocation -skip qtlottie -skip qtmultimedia -skip qtnetworkauth -skip qtpdf -skip qtpositioning -skip qtquick3dphysics -skip qtquickeffectmaker -skip qtremoteobjects -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip debug_info -skip qt5compat -skip qtquick3d -skip qtquicktimeline -skip qtwaylandcompositor -nomake examples -nomake tests -extprefix ~/qt/qt-raspi -prefix ~/qt/qt${{ env.QT_VERSION }}-raspi -device linux-rasp-pi4-aarch64 -qt-host-path $Qt6_DIR -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=../PiDMX/Resources/RaspBerryPi/rpi_toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
 
       - name: Building Qt Sources for RaspBerry Pi
         working-directory: source
