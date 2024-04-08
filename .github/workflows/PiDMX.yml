@@ -117,7 +117,7 @@ jobs:
         id: qt-desktop
         uses: jurplel/install-qt-action@v3
         with:
-          aqtversion: ==2.1.*
+          aqtversion: ==3.1.*
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
