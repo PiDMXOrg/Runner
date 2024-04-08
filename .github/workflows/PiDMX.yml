@@ -121,7 +121,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
-          arch: "win64_llvm_mingw"
+          arch: "win64_mingw"
           tools: 'tools_ifw'
 
       - name: Test path
