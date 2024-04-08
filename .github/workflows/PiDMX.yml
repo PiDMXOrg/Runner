@@ -121,7 +121,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           modules: qtserialport
           set-env: true
-          arch: "win64_mingw"
+          arch: "win64_llvm_mingw"
           tools: 'tools_ifw'
 
       - name: Test path
@@ -205,6 +205,8 @@ jobs:
           cd deploy
           windeployqt ./packages/net.pidmx.pidmx/data/PiDMX.exe --qmldir ./../../src/QML/Views --compiler-runtime
           windeployqt ./packages/net.pidmx.pidmx/data/libPiDMXLib.dll --qmldir ./../../src/QML/Views --compiler-runtime
+          windeployqt ./packages/net.pidmx.pidmx/data/libkddockwidgets-qt62.dll --qmldir ./../../src/QML/Views --compiler-runtime
+          windeployqt ./packages/net.pidmx.pidmx/data/libQt-Secret.dll --qmldir ./../../src/QML/Views --compiler-runtime
 
       - name: Zipping Files
         working-directory: source
