@@ -6,7 +6,7 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
-  QT_VERSION: 6.5.3
+  QT_VERSION: 6.7.0
 
 jobs:
   buildMacOS:
@@ -207,34 +207,17 @@ jobs:
           windeployqt ./packages/net.pidmx.pidmx/data/libPiDMXLib.dll --qmldir ./../../src/QML/Views --compiler-runtime
           windeployqt ./packages/net.pidmx.pidmx/data/libkddockwidgets-qt62.dll --qmldir ./../../src/QML/Views --compiler-runtime
           windeployqt ./packages/net.pidmx.pidmx/data/libQt-Secret.dll --qmldir ./../../src/QML/Views --compiler-runtime
-
-      - name: Zipping Files
+      
+      - name: Creating Installer
         working-directory: source
         run: |
-          cd ../PiDMX/build/deploy/packages/net.pidmx.pidmx/
-          dir
-          mv ./data ./PiDMX
-          dir
-          7z a -tzip PiDMX.zip ./PiDMX
-          dir
-
+          cd ../PiDMX/build/deploy
+          ls ${{ env.IQTA_TOOLS }}/QtInstallerFramework
+          ${{ env.IQTA_TOOLS }}/QtInstallerFramework/4.7/bin/binarycreator -c config\config.xml -p packages PiDMX.exe
+      
       - name: Upload artifacts
         uses: actions/upload-artifact@v2.1.4
         with:
           name: pidmx-windows
           path: |
-            D:/a/Runner/Runner/PiDMX/build/deploy/packages/net.pidmx.pidmx/PiDMX.zip
-      
-#      - name: Creating Installer
-#        working-directory: source
-#        run: |
-#          cd ../PiDMX/build/deploy
-#          ls ${{ env.IQTA_TOOLS }}/QtInstallerFramework
-#          ${{ env.IQTA_TOOLS }}/QtInstallerFramework/4.7/bin/binarycreator -c config\config.xml -p packages PiDMX.exe
-      
-#      - name: Upload artifacts
-#        uses: actions/upload-artifact@v2.1.4
-#        with:
-#          name: pidmx-windows
-#          path: |
-#            D:/a/Runner/Runner/PiDMX/build/deploy/PiDMX.exe
+            D:/a/Runner/Runner/PiDMX/build/deploy/PiDMX.exe
