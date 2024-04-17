@@ -7,7 +7,7 @@ concurrency:
 
 env:
     QT_VERSION: 6.5.3
-    BRANCH_NAME: develop
+    BRANCH_NAME: main
 
 jobs:
     buildIos:
