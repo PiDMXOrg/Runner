@@ -11,7 +11,7 @@ env:
 jobs:
   buildMacOS:
     name: MacOS
-    runs-on: macos-latest
+    runs-on: macos-13
 
     steps:          
       - name: Checkout
